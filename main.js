@@ -1,46 +1,53 @@
-function sumar(a, b) {
-    return a + b;
+let saldo = 0;
+let extracto = [];
+
+// Objeto para simular una transacción bancaria
+function Transaccion(tipo, monto) {
+    this.tipo = tipo;
+    this.monto = monto;
 }
 
-function restar(a, b) {
-    return a - b;
+// Funciones para simular el cajero automático
+function consultarSaldo() {
+    return saldo;
 }
 
-function multiplicar(a, b) {
-    return a * b;
+function consultarExtracto() {
+    return extracto;
 }
 
-function dividir(a, b) {
-    return a / b;
-}
-function calcularResto(a, b){
-    return a % b;
+function depositar(monto) {
+    saldo += monto;
+    extracto.push(new Transaccion("Depósito", monto));
 }
 
-function calcular() {
-    const num1 = Number(prompt("Ingrese el primer número: "));
-    const num2 = Number(prompt("Ingrese el segundo número: "));
-    const operacion = prompt("Ingrese la operación (+, -, *, /, %): ");
-
-    switch (operacion) {
-        case "+":
-            alert("El resultado es: " + sumar(num1, num2));
-            break;
-        case "-":
-            alert("El resultado es: " + restar(num1, num2));
-            break;
-        case "*":
-            alert("El resultado es: " + multiplicar(num1, num2));
-            break;
-        case "/":
-            alert("El resultado es: " + dividir(num1, num2));
-            break;
-        case "%":
-            alert("El resultado es: " + calcularResto(num1, num2));
-            break;
-        default:
-            alert("Operación no válida");
+function retirar(monto) {
+    if (saldo >= monto) {
+        saldo -= monto;
+        extracto.push(new Transaccion("Retiro", monto));
+    } else {
+        alert("Saldo insuficiente");
     }
 }
 
-calcular();
+// Programa principal
+let operacion = prompt("Ingrese la operación (Consultar Saldo, Consultar Extracto, Depositar, Retirar): ");
+
+switch (operacion) {
+    case "Consultar Saldo":
+        alert("El saldo actual es: " + consultarSaldo());
+        break;
+    case "Consultar Extracto":
+        alert("El extracto de la cuenta es: " + JSON.stringify(consultarExtracto()));
+        break;
+    case "Depositar":
+        let montoDepositar = Number(prompt("Ingrese el monto a depositar: "));
+        depositar(montoDepositar);
+        break;
+    case "Retirar":
+        let montoRetirar = Number(prompt("Ingrese el monto a retirar: "));
+        retirar(montoRetirar);
+        break;
+    default:
+        alert("Operación no válida");
+}
